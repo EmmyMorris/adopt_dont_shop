@@ -14,7 +14,6 @@ class PetApplicationsController < ApplicationController
   end
 
   def create
-    binding.pry
     pet_application = PetApplication.new(pet_application_params)
     pet_application.description = ''
     pet_application.status = "In Progress"
