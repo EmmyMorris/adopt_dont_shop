@@ -29,4 +29,21 @@ RSpec.describe 'the application creation' do
     expect(page).to have_content(pet_1.name)
     expect(page).to have_content(pet_2.name)
   end
+
+  it "Searches for Pets for an Application" do
+    @pet_application = PetApplication.create!(name: 'Kathy', street_address: '16998 Farmwell Drive', city: 'Denver', state: 'Colorado', zip_code: '80014', description: 'No kids', status: 'Pending')
+    shelter = Shelter.create(name: 'Mystery Building', city: 'Irvine CA', foster_program: false, rank: 9)
+    pet_1 = Pet.create!(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: shelter.id)
+    pet_2 = Pet.create!(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: shelter.id)
+    pet_3 = Pet.create!(adoptable: true, age: 4, breed: 'chihuahua', name: 'Barkey', shelter_id: shelter.id)
+
+    visit "/pet_applications/#{@pet_application.id}"
+    save_and_open_page
+    fill_in 'Search', with: "Ba"
+    click_on("Search")
+
+    expect(page).to have_content(pet_1.name)
+    expect(page).to have_content(pet_3.name)
+    expect(page).to_not have_content(pet_2.name)
+  end
 end
