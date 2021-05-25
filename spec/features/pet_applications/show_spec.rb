@@ -73,4 +73,41 @@ RSpec.describe 'the application creation' do
     expect(current_path).to eq("/pet_applications/#{@pet_application.id}")
     expect(page).to have_content(@pet_1.name)
   end
+
+  it 'submits an application' do
+    # Submit an Application
+    # As a visitor
+    # When I visit an application's show page
+    # And I have added one or more pets to the application
+    # Then I see a section to submit my application
+    # And in that section I see an input to enter why I would make a good owner for these pet(s)
+    # When I fill in that input
+    # And I click a button to submit this application
+    # Then I am taken back to the application's show page
+    # And I see an indicator that the application is "Pending"
+    # And I see all the pets that I want to adopt
+    # And I do not see a section to add more pets to this application
+    visit "/pet_applications/#{@pet_application.id}"
+    fill_in 'Search', with: "Lucille Bald"
+    click_on("Search")
+    expect(page).to have_content(@pet_1.name)
+    click_on("Adopt #{@pet_1.name}")
+    expect(current_path).to eq("/pet_applications/#{@pet_application.id}")
+    expect(page).to have_content(@pet_1.name)
+
+    fill_in 'Search', with: "Lobster"
+    click_on("Search")
+    expect(page).to have_content(@pet_2.name)
+    click_on("Adopt #{@pet_2.name}")
+    expect(current_path).to eq("/pet_applications/#{@pet_application.id}")
+    expect(page).to have_content(@pet_2.name)
+
+    fill_in 'Description', with: "I have no other pets"
+    click_on("Submit")
+    expect(current_path).to eq("/pet_applications/#{@pet_application.id}")
+    expect(page).to have_content("Application Status: Pending")
+    expect(page).to have_content(@pet_1.name)
+    expect(page).to have_content(@pet_2.name)
+    expect(page).to_not have_content("Search")
+  end
 end

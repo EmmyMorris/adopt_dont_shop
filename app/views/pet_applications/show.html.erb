@@ -11,6 +11,14 @@
     <%= link_to "#{pet.name}", "/pets/#{pet.id}" %>
   <% end %>
 </p>
+
+<p>Add pet to this application</p>
+<%= form_with url: "/pet_applications/#{@pet_application.id}", method: :get, local: true do |f| %>
+  <%= f.label :search %>
+  <%= f.text_field :search %>
+  <%= f.submit "Search" %>
+<% end %>
+
 <p>Add pet to this application</p>
 <%= form_with url: "/pet_applications/#{@pet_application.id}", method: :get, local: true do |f| %>
   <%= f.label :search %>
