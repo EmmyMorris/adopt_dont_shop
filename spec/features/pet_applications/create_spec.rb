@@ -26,15 +26,34 @@ RSpec.describe 'the application index' do
     visit "/pets"
     click_link("Start an Application")
     expect(current_path).to eq("/pet_applications/new/")
-    fill_in 'Applicant', with: "Kathy"
-    fill_in 'Street Address', with: "16998 Farmwell Drive"
+    fill_in 'Name', with: "Kathy"
+    fill_in 'Street address', with: "16998 Farmwell Drive"
     fill_in 'City', with: "Denver"
     fill_in 'State', with: "Colorado"
-    fill_in 'Zip Code', with: "80014"
-    fill_in 'Description', with: "No kids"
-    fill_in 'Application Status', with: "Pending"
+    fill_in 'Zip code', with: "80014"
     click_on("Save")
-    save_and_open_page
-    expect(current_path).to eq("/pet_applications/#{@pet_application.id}/")
+    new_application_id = PetApplication.last.id
+    expect(current_path).to eq("/pet_applications/#{new_application_id}")
+  end
+
+  it "redirects to same page if form is not filled out all the way" do
+    # Starting an Application, Form not Completed
+    # As a visitor
+    # When I visit the new application page
+    # And I fail to fill in any of the form fields
+    # And I click submit
+    # Then I am taken back to the new applications page
+    # And I see a message that I must fill in those fields.
+    visit "/pets"
+    click_link("Start an Application")
+    expect(current_path).to eq("/pet_applications/new/")
+    fill_in 'Name', with: "Kathy"
+    fill_in 'Street address', with: "16998 Farmwell Drive"
+    #doesn't fill in city
+    fill_in 'State', with: "Colorado"
+    fill_in 'Zip code', with: "80014"
+    click_on("Save")
+    expect(page).to have_content("Application not created: Required information missing.")
+    expect(current_path).to eq("/pet_applications/new")
   end
 end
