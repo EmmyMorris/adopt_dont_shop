@@ -14,15 +14,10 @@ class PetApplicationsController < ApplicationController
   end
 
   def create
-    pet_application = PetApplication.new(
-      name: params[:name],
-      street_address: params[:street_address],
-      city: params[:city],
-      state: params[:state],
-      zip_code: params[:zip_code],
-      description: '',
-      status: "In Progress"
-      )
+    binding.pry
+    pet_application = PetApplication.new(pet_application_params)
+    pet_application.description = ''
+    pet_application.status = "In Progress"
     if pet_application.save
       redirect_to "/pet_applications/#{pet_application.id}"
     else
@@ -40,6 +35,6 @@ class PetApplicationsController < ApplicationController
   private
 
   def pet_application_params
-    params.permit(:id, :name, :street_address, :city, :state, :zip_code, :description, :status)
+    params.permit(:name, :street_address, :city, :state, :zip_code)
   end
 end

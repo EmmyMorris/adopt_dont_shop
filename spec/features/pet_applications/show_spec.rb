@@ -38,7 +38,6 @@ RSpec.describe 'the application creation' do
     pet_3 = Pet.create!(adoptable: true, age: 4, breed: 'chihuahua', name: 'Barkey', shelter_id: shelter.id)
 
     visit "/pet_applications/#{@pet_application.id}"
-    save_and_open_page
     fill_in 'Search', with: "Ba"
     click_on("Search")
 
