@@ -11,3 +11,17 @@
     <%= link_to "#{pet.name}", "/pets/#{pet.id}" %>
   <% end %>
 </p>
+<p>Add pet to this application</p>
+<%= form_with url: "/pet_applications/#{@pet_application.id}", method: :get, local: true do |f| %>
+  <%= f.label :search %>
+  <%= f.text_field :search %>
+  <%= f.submit "Search" %>
+<% end %>
+
+<% @adoptable_pets.each do |pet| %>
+  <h3><%= pet.name %></h3>
+  <p>Age: <%= pet.age %></p>
+  <p>Breed: <%= pet.breed %></p>
+  <p>Adoptable: </p>
+  <p>You can find <%= pet.name %> at <%= pet.shelter_name %>!</p>
+<% end %>

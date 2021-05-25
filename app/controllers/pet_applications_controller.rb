@@ -1,6 +1,13 @@
 class PetApplicationsController < ApplicationController
   def show
     @pet_application = PetApplication.find(params[:id])
+    @pets = @pet_application.pets
+    @all_pets = Pet.all
+    if params[:search].present?
+      @adoptable_pets = Pet.search(params[:search])
+    else
+      @adoptable_pets = []
+    end
   end
 
   def new
@@ -13,6 +20,7 @@ class PetApplicationsController < ApplicationController
       city: params[:city],
       state: params[:state],
       zip_code: params[:zip_code],
+      description: '',
       status: "In Progress"
       )
     if pet_application.save
@@ -22,6 +30,12 @@ class PetApplicationsController < ApplicationController
       render :new
     end
   end
+
+  # def update
+  #   @pet_application = PetApplication.find(params[:id])
+  #   @pet = Pet.find(params[:pet_id])
+  #   @pet_application.pets << @pet
+  # end
 
   private
 
