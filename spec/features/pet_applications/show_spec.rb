@@ -47,7 +47,39 @@ RSpec.describe 'the application creation' do
     # Then I am taken back to the application show page
     # And under the search bar I see any Pet whose name matches my search
     visit "/pet_applications/#{@pet_application.id}"
+    fill_in 'Search', with: "Barkey"
+    click_on("Search")
+
+    expect(page).to have_content(@pet_3.name)
+    expect(page).to_not have_content(@pet_1.name)
+    expect(page).to_not have_content(@pet_2.name)
+  end
+
+  it "searched for martial matches for pet names" do
+    # Partial Matches for Pet Names
+    # As a visitor
+    # When I visit an application show page
+    # And I search for Pets by name
+    # Then I see any pet whose name PARTIALLY matches my search
+    # For example, if I search for "fluff", my search would match pets with names "fluffy", "fluff", and "mr. fluff"
+    visit "/pet_applications/#{@pet_application.id}"
     fill_in 'Search', with: "Ba"
+    click_on("Search")
+
+    expect(page).to have_content(@pet_1.name)
+    expect(page).to have_content(@pet_3.name)
+    expect(page).to_not have_content(@pet_2.name)
+  end
+
+  it "searched for case insensitive for pet names" do
+    # Case Insensitive Matches for Pet Names
+    # As a visitor
+    # When I visit an application show page
+    # And I search for Pets by name
+    # Then my search is case insensitive
+    # For example, if I search for "fluff", my search would match pets with names "Fluffy", "FLUFF", and "Mr. FlUfF"
+    visit "/pet_applications/#{@pet_application.id}"
+    fill_in 'Search', with: "ba"
     click_on("Search")
 
     expect(page).to have_content(@pet_1.name)
