@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'the application creation' do
   before(:each) do
-    @pet_application = PetApplication.create!(name: 'Kathy', street_address: '16998 Farmwell Drive', city: 'Denver', state: 'Colorado', zip_code: '80014', description: 'No kids', status: 'Pending')
+    PetApplication.destroy_all
+    Shelter.destroy_all
+    Pet.destroy_all
+    @pet_application = PetApplication.create!(name: 'Kathy', street_address: '16998 Farmwell Drive', city: 'Denver', state: 'Colorado', zip_code: '80014')
     @shelter = Shelter.create(name: 'Mystery Building', city: 'Irvine CA', foster_program: false, rank: 9)
     @pet_1 = Pet.create!(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: @shelter.id)
     @pet_2 = Pet.create!(adoptable: true, age: 3, breed: 'doberman', name: 'Lobster', shelter_id: @shelter.id)
@@ -22,7 +25,6 @@ RSpec.describe 'the application creation' do
     # - The Application's status, either "In Progress", "Pending", "Accepted", or "Rejected"
     # shelter = Shelter.create(name: 'Mystery Building', city: 'Irvine CA', foster_program: false, rank: 9)
     # pet = PetApplication.pet.create!(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: @shelter.id)
-    pet = @pet_application.pets.create!(adoptable: true, age: 1, breed: 'sphynx', name: 'Lucille Bald', shelter_id: @shelter.id)
     visit "/pet_applications/#{@pet_application.id}"
     expect(page).to have_content(@pet_application.name)
     expect(page).to have_content(@pet_application.street_address)
@@ -31,7 +33,6 @@ RSpec.describe 'the application creation' do
     expect(page).to have_content(@pet_application.zip_code)
     expect(page).to have_content(@pet_application.description)
     expect(page).to have_content(@pet_application.status)
-    expect(page).to have_content(pet.name)
   end
 
   it "Searches for Pets for an Application" do
@@ -103,11 +104,24 @@ RSpec.describe 'the application creation' do
     expect(page).to have_content(@pet_2.name)
 
     fill_in 'Description', with: "I have no other pets"
-    click_on("Submit")
+    click_on("Submit My Application")
+
     expect(current_path).to eq("/pet_applications/#{@pet_application.id}")
     expect(page).to have_content("Application Status: Pending")
     expect(page).to have_content(@pet_1.name)
     expect(page).to have_content(@pet_2.name)
     expect(page).to_not have_content("Search")
+    expect(page).to_not have_content("Submit My Application")
+  end
+
+  it "has no pets on an aplication" do
+    # No Pets on an Application
+    # As a visitor
+    # When I visit an application's show page
+    # And I have not added any pets to the application
+    # Then I do not see a section to submit my application
+    visit "/pet_applications/#{@pet_application.id}"
+    #no pets added
+    expect(page).to_not have_content("Submit My Application")
   end
 end

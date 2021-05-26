@@ -34,6 +34,8 @@ RSpec.describe 'the application index' do
     click_on("Save")
     new_application_id = PetApplication.last.id
     expect(current_path).to eq("/pet_applications/#{new_application_id}")
+    expect(page).to have_content("In Progress")
+    expect(page).to have_content("Description:")
   end
 
   it "redirects to same page if form is not filled out all the way" do

@@ -15,7 +15,7 @@ class PetApplicationsController < ApplicationController
 
   def create
     pet_application = PetApplication.new(pet_application_params)
-    pet_application.description = ''
+    pet_application.description = '' || nil
     pet_application.status = "In Progress"
     if pet_application.save
       redirect_to "/pet_applications/#{pet_application.id}"
@@ -25,11 +25,15 @@ class PetApplicationsController < ApplicationController
     end
   end
 
-  # def update
-  #   @pet_application = PetApplication.find(params[:id])
-  #   @pet = Pet.find(params[:pet_id])
-  #   @pet_application.pets << @pet
-  # end
+  def update
+    @pet_application = PetApplication.find(params[:id])
+    if params[:description]
+      @pet_application.description = params[:description]
+      @pet_application.status = "Pending"
+      @pet_application.save!
+      redirect_to "/pet_applications/#{@pet_application.id}"
+    end
+  end
 
   private
 

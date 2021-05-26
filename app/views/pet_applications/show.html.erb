@@ -9,28 +9,37 @@
 <p>
   <%= @pet_application.pets.each do |pet| %>
     <%= link_to "#{pet.name}", "/pets/#{pet.id}" %>
+    <br>
   <% end %>
 </p>
-
-<p>Add pet to this application</p>
-<%= form_with url: "/pet_applications/#{@pet_application.id}", method: :get, local: true do |f| %>
-  <%= f.label :search %>
-  <%= f.text_field :search %>
-  <%= f.submit "Search" %>
+<br>
+<% if (@pet_application.pets.count > 0) && (@pet_application.status == "In Progress" || '' || nil) && (@pet_application.status != "Pending")%>
+  <h4>Submit My Application</h4>
+  <p>Why I would make a good owner for these pet(s):</p>
+  <%= form_with url: "/pet_applications/#{@pet_application.id}", method: :patch, local: true do |f| %>
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+    <%= f.submit "Submit My Application" %>
+  <% end %>
 <% end %>
 
-<p>Add pet to this application</p>
-<%= form_with url: "/pet_applications/#{@pet_application.id}", method: :get, local: true do |f| %>
-  <%= f.label :search %>
-  <%= f.text_field :search %>
-  <%= f.submit "Search" %>
-<% end %>
+<br>
+<br>
 
-<% @adoptable_pets.each do |pet| %>
-  <h3><%= pet.name %></h3>
-  <p>Age: <%= pet.age %></p>
-  <p>Breed: <%= pet.breed %></p>
-  <p>Adoptable: </p>
-  <p>You can find <%= pet.name %> at <%= pet.shelter_name %>!</p>
-  <p><%= link_to "Adopt #{pet.name}", "/application_pets/create?pet=#{pet.id}&app=#{@pet_application.id}", method: :post, local: true %></p>
+<% if (@pet_application.status == "In Progress" || '' || nil) && (@pet_application.status != "Pending") %>
+  <h4>Add New Pet</h4>
+  <p>Add a pet to this application:</p>
+  <%= form_with url: "/pet_applications/#{@pet_application.id}", method: :get, local: true do |f| %>
+    <%= f.label :search %>
+    <%= f.text_field :search %>
+    <%= f.submit "Search" %>
+  <% end %>
+  <% @adoptable_pets.each do |pet| %>
+    <h3><%= pet.name %></h3>
+    <p>Age: <%= pet.age %></p>
+    <p>Breed: <%= pet.breed %></p>
+    <p>Adoptable: </p>
+    <p>You can find <%= pet.name %> at <%= pet.shelter_name %>!</p>
+    <p><%= link_to "Adopt #{pet.name}", "/application_pets/create?pet=#{pet.id}&app=#{@pet_application.id}", method: :post, local: true %></p>
+  <% end %>
 <% end %>
