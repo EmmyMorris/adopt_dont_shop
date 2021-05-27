@@ -33,6 +33,10 @@ class Shelter < ApplicationRecord
   end
 
   def self.sorted
-    Shelter.find_by_sql("SELECT * FROM Shelters ORDER BY name desc")
+    find_by_sql("SELECT * FROM Shelters ORDER BY name desc")
+  end
+
+  def self.pending_shelters
+    joins(pets: :pet_applications).where(:status == "Pending").uniq
   end
 end
