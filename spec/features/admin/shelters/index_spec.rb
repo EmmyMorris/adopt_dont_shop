@@ -9,7 +9,7 @@ RSpec.describe 'the admin shelter index' do
     @shelter_2 = Shelter.create(name: 'RGV animal shelter', city: 'Harlingen, TX', foster_program: false, rank: 5)
     @shelter_3 = Shelter.create(name: 'Fancy pets of Colorado', city: 'Denver, CO', foster_program: true, rank: 10)
     @pet_1 = @shelter_1.pets.create(name: 'Mr. Pirate', breed: 'tuxedo shorthair', age: 5, adoptable: true)
-    @shelter_1.pets.create(name: 'Clawdia', breed: 'shorthair', age: 3, adoptable: true)
+    # @shelter_1.pets.create(name: 'Clawdia', breed: 'shorthair', age: 3, adoptable: true)
     @pet_2 = @shelter_3.pets.create!(name: 'Lucille Bald', breed: 'sphynx', age: 8, adoptable: true)
   end
   it 'lists shelter by reverse alphabetical order' do
@@ -37,7 +37,6 @@ RSpec.describe 'the admin shelter index' do
     # And in this section I see the name of every shelter that has a pending application
     ApplicationPet.create!(pet: @pet_1, pet_application: @pet_application)
     ApplicationPet.create!(pet: @pet_2, pet_application: @pet_application_2)
-    # pet_1 = Shelter.pets
     visit "/admin/shelters"
     within("div#pending") do
 

@@ -4,6 +4,14 @@ class Shelter < ApplicationRecord
   validates :city, presence: true
 
   has_many :pets, dependent: :destroy
+  # has_many :pet_applications, through: :pets
+
+
+  def self.pending_shelters
+    # joins(pets: :pet_applications).where(:status == "Pending").uniq
+    joins(:pet_applications).where(:pet_applications => {:status => "Pending"}).distinct
+
+  end
 
   def self.order_by_recently_created
     order(created_at: :desc)
@@ -37,6 +45,7 @@ class Shelter < ApplicationRecord
   end
 
   def self.pending_shelters
-    joins(pets: :pet_applications).where(pet_applications: {:status => "Pending"}).distinct
+    # joins(pets: :pet_applications).where(:status == "Pending").uniq
+    joins(pets: :pet_applications).where(:pet_applications => {:status => "Pending"}).distinct
   end
 end

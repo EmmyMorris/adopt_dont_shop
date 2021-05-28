@@ -22,10 +22,10 @@ RSpec.describe 'the admin application show page' do
     # And next to the pet that I approved, I do not see a button to approve this pet
     # And instead I see an indicator next to the pet that they have been approved
     new_application_id = PetApplication.last.id
-    visit "/admin/pet_applications/#{new_application_id}"
+    visit "/admin/pet_applications/#{@pet_application.id}"
     save_and_open_page
     click_on "Approve #{@pet_1.name}"
-    expect(current_path).to eq("/admin/pet_applications/#{new_application_id}")
+    expect(current_path).to eq("/admin/pet_applications/#{@pet_application.id}")
     expect(page).to_not have_content("Approve #{@pet_1.name}")
     expect(page).to have_content("Approved #{@pet_1.name}")
   end

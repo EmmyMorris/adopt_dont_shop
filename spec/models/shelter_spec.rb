@@ -14,6 +14,7 @@ RSpec.describe Shelter, type: :model do
 
   before(:each) do
     @pet_application = PetApplication.create!(name: 'Kathy', street_address: '16998 Farmwell Drive', city: 'Denver', state: 'Colorado', zip_code: '80014', description: "I have no other pets", status: "Pending")
+    @pet_application_in_progress = PetApplication.create!(name: 'Kathy', street_address: '16998 Farmwell Drive', city: 'Denver', state: 'Colorado', zip_code: '80014', description: "I have no other pets", status: "In Progress")
 
     @shelter_1 = Shelter.create(name: 'Aurora shelter', city: 'Aurora, CO', foster_program: false, rank: 9)
     @shelter_2 = Shelter.create(name: 'RGV animal shelter', city: 'Harlingen, TX', foster_program: false, rank: 5)
@@ -25,6 +26,8 @@ RSpec.describe Shelter, type: :model do
     @pet_4 = @shelter_1.pets.create(name: 'Ann', breed: 'ragdoll', age: 5, adoptable: true)
 
     @application_pet = ApplicationPet.create!(pet: @pet_1, pet_application: @pet_application)
+    @application_pet = ApplicationPet.create!(pet: @pet_2, pet_application: @pet_application)
+    ApplicationPet.create!(pet: @pet_3, pet_application: @pet_application_in_progress)
   end
 
   describe 'class methods' do

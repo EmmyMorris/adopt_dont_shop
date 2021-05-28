@@ -46,10 +46,10 @@ Rails.application.routes.draw do
 
   post 'application_pets/create', to: 'application_pets#create'
 
-  # get 'admin/pet_applications/:id', to: 'pet_applications#show'
+  patch "/admin/pet_applications/:id/pets/:pet_id/approved", to: 'admin/pet_applications#approved'
 
   namespace 'admin' do
     resources 'shelters', only: [:index]
-    resources 'pet_applications', only: [:show, :update]
+    resources 'pet_applications', only: [:show]
   end
 end
